@@ -22,7 +22,9 @@
 </template>
 
 <script>
-import { http } from '@/http'
+//import { http } from '@/http'
+import { mapActions } from 'vuex' // para chamar action
+//precisa importar o mapactions 
 
 export default {
   data() {
@@ -33,19 +35,42 @@ export default {
       }
     }
   },
+ 
   methods: {
-    submit(){
-   //  console.log(this.form)
-     http.post('api/login', this.form).then(res => {
-       console.log(res)
+
+        ...mapActions ('auth', ['ActionLogin']),  // invocar action
+
+
+    async submit(){
+  
+      /* http.post('api/login', this.form).then(res => {
+       console.log(res.data)
      }).catch(e => {
        console.log(e.status)
-     })
+     }) */
+ 
+
+    try {
+      await  this.ActionLogin(this.form)
+
+      this.$router.push({ name: 'Home'})
+    } catch (e) {
+          alert(e.data? e.data.message : 'ops ocorreu um erro inesperado' )
     }
+
+
+
+    },
+
+
+
+
   },
 
   created() {
-    document.body.style.backgroundColor = "orange";
+    document.body.style.backgroundColor = "#198754";
+    
+   
   },
   destroyed: function () {
     document.body.style.backgroundColor = null;
